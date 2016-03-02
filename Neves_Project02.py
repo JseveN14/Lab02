@@ -1,6 +1,3 @@
-#Jessica Neves Project 2
-#Simple Calculator
-
 expr = None #set expression empty for while loop to function
 memory_bank = [] #empty list to store past expressions
 
@@ -8,8 +5,8 @@ memory_bank = [] #empty list to store past expressions
 input("Press the Enter key to start the calculator.")
 print("Type 'end' to exit the calculator.")
 print("Type 'last' to retrieve the last 3 entries in the memory bank.")
-print("Type 'last2' to retrieve the last 2 entries in the memory bank.")
-print("Type 'last1' to retrieve the last entry in the memory bank.")
+print("Type 'last 2' to retrieve the last 2 entries in the memory bank.")
+print("Type 'last 1' to retrieve the last entry in the memory bank.")
 
 #while loop to keep calculator on
 while expr != "end":
@@ -19,6 +16,25 @@ while expr != "end":
     elif expr == "" or expr == " ":#invalid if input blank
         print("\nInvalid expression")
 
+    #elif statements for memory bank
+    elif expr == "last":
+        if memory_bank == []:
+            print("There are past expressions to display.")
+        else:
+            print(memory_bank)
+            
+    elif expr == "last 2":
+        if memory_bank == []:
+            print("There are past expressions to display.")
+        else:
+            print(memory_bank[0:2])
+        
+    elif expr == "last 1":
+        if memory_bank == []:
+            print("There are past expressions to display.")
+        else:
+            print(memory_bank[0])
+
     #elif for invalid symbols
     elif ((0<=expr.find("["))or(0<=expr.find("]"))or(0<=expr.find("{"))
         or(0<=expr.find("}"))or(0<=expr.find("|"))or(0<=expr.find("_"))
@@ -26,8 +42,8 @@ while expr != "end":
         or(0<=expr.find("$"))or(0<=expr.find("#"))or(0<=expr.find("@"))
         or(0<=expr.find("!"))or(0<=expr.find("`"))or(0<=expr.find("~"))
         or(0<=expr.find("<"))or(0<=expr.find(">"))or(0<=expr.find("="))
-        or(0<=expr.find(","))or(0<=expr.find("?"))or(0<=expr.find("."))
-        or(0<=expr.find(":"))or(0<=expr.find(";"))or(0<=expr.find(" "))):
+        or(0<=expr.find(","))or(0<=expr.find("?"))or(0<=expr.find(":"))
+        or(0<=expr.find(";"))or(0<=expr.find(" "))):
         print("\nInvalid expression")
 
     #elif for invalid lowercase letters
@@ -53,15 +69,7 @@ while expr != "end":
         or(0<=expr.find("V"))or(0<=expr.find("W"))or(0<=expr.find("X"))
         or(0<=expr.find("Y"))or(0<=expr.find("Z"))):
         print("\nInvalid expression")
-        
-    #elif statements for memory bank
-    elif expr == "last":
-        print(memory_bank)
-    elif expr == "last2":
-        print(memory_bank[0:2])
-    elif expr == "last1":
-        print(memory_bank[0])
-        
+
     #elif statements for parentheses
     elif ((0 < expr.find("(") < len(expr)-1)#parentheses in expression
         or (0 < expr.find(")") < len(expr)-1)):
@@ -87,55 +95,94 @@ while expr != "end":
                 
         #if statement for addition
         elif (len(expr)-1 > expr.find("+") > 0):#if operator inside expression
-            first_number = expr[0:expr.find("+")] 
-            second_number = expr[expr.find("+")+1: ]
-
-            first_number = float(first_number)
-            second_number = float(second_number)
-            calculation = first_number + second_number
-            answer = expr + " = " + str(calculation)
-            print(answer)
-            memory_bank.insert(0, answer) #inserts answer to [0] position 
-            memory_bank = memory_bank[:3] #displays up to the 3rd expression
+            first_number = expr[0:expr.find("+")]
+            if first_number != "." and first_number[-1] != ".":
+                second_number = expr[expr.find("+")+1: ]
+                if (second_number != "." and second_number[-1] != "."
+                    #more than one operator in expr appears in second_number
+                    and second_number.find("+") < 0
+                    and second_number.find("-") < 0
+                    and second_number.find("*") < 0
+                    and second_number.find("/") < 0):
+                    first_number = float(first_number)
+                    second_number = float(second_number)
+                    calculation = first_number + second_number
+                    answer = expr + " = " + str(calculation)
+                    print(answer)
+                    #inserts answer to [0] position
+                    memory_bank.insert(0, answer)
+                    #displays up to the 3rd expression
+                    memory_bank = memory_bank[:3]
+                else:
+                    print("\nInvalid expression")
+            else:
+                print("\nInvalid expression")
 
         #elif statement for subtraction
         elif (len(expr)-1 > expr.find("-") > 0):
-            first_number = expr[0:expr.find("-")] 
-            second_number = expr[expr.find("-")+1: ]
-
-            first_number = float(first_number)
-            second_number = float(second_number)
-            calculation = first_number - second_number
-            answer = expr + " = " + str(calculation)
-            print(answer)
-            memory_bank.insert(0, answer)
-            memory_bank = memory_bank[:3]
+            first_number = expr[0:expr.find("-")]
+            if first_number != "." and first_number[-1] != ".":
+                second_number = expr[expr.find("-")+1: ]
+                if (second_number != "." and second_number[-1] != "."
+                    and second_number.find("+") < 0
+                    and second_number.find("-") < 0
+                    and second_number.find("*") < 0
+                    and second_number.find("/") < 0):
+                    first_number = float(first_number)
+                    second_number = float(second_number)
+                    calculation = first_number - second_number
+                    answer = expr + " = " + str(calculation)
+                    print(answer)
+                    memory_bank.insert(0, answer)
+                    memory_bank = memory_bank[:3]
+                else:
+                    print("\nInvalid expression")
+            else:
+                print("\nInvalid expression")
 
         #elif statement for multiplication
         elif (len(expr)-1 > expr.find("*") > 0):
-            first_number = expr[0:expr.find("*")] 
-            second_number = expr[expr.find("*")+1: ]
-
-            first_number = float(first_number)
-            second_number = float(second_number)
-            calculation = first_number * second_number
-            answer = expr + " = " + str(calculation)
-            print(answer)
-            memory_bank.insert(0, answer)
-            memory_bank = memory_bank[:3]
+            first_number = expr[0:expr.find("*")]
+            if first_number != "." and first_number[-1] != ".":
+                second_number = expr[expr.find("*")+1: ]
+                if (second_number != "." and second_number[-1] != "."
+                    and second_number.find("+") < 0
+                    and second_number.find("-") < 0
+                    and second_number.find("*") < 0
+                    and second_number.find("/") < 0):
+                    first_number = float(first_number)
+                    second_number = float(second_number)
+                    calculation = first_number * second_number
+                    answer = expr + " = " + str(calculation)
+                    print(answer)
+                    memory_bank.insert(0, answer)
+                    memory_bank = memory_bank[:3]
+                else:
+                    print("\nInvalid expression")
+            else:
+                print("\nInvalid expression")
 
         #elif statement for division
         elif (len(expr)-1 > expr.find("/") > 0):
-            first_number = expr[0:expr.find("/")] 
-            second_number = expr[expr.find("/")+1: ]
-
-            first_number = float(first_number)
-            second_number = float(second_number)
-            calculation = first_number / second_number
-            answer = expr + " = " + str(calculation)
-            print(answer)
-            memory_bank.insert(0, answer)
-            memory_bank = memory_bank[:3]
+            first_number = expr[0:expr.find("/")]
+            if first_number != "." and first_number[-1] != ".":
+                second_number = expr[expr.find("/")+1: ]
+                if (second_number != "." and second_number[-1] != "."
+                    and second_number.find("+") < 0
+                    and second_number.find("-") < 0
+                    and second_number.find("*") < 0
+                    and second_number.find("/") < 0):
+                    first_number = float(first_number)
+                    second_number = float(second_number)
+                    calculation = first_number / second_number
+                    answer = expr + " = " + str(calculation)
+                    print(answer)
+                    memory_bank.insert(0, answer)
+                    memory_bank = memory_bank[:3]
+                else:
+                    print("\nInvalid expression")
+            else:
+                print("\nInvalid expression")
                     
         else:
             print("\nInvalid expression")
@@ -150,56 +197,92 @@ while expr != "end":
     
     #elif statement for addition
     elif (len(expr)-1 > expr.find("+") > 0):
-        first_number = expr[0:expr.find("+")] 
-        second_number = expr[expr.find("+")+1: ]
-
-        first_number = float(first_number)
-        second_number = float(second_number)
-        calculation = first_number + second_number
-        answer = expr + " = " + str(calculation)
-        print(answer)
-        memory_bank.insert(0, answer) #inserts answer to [0] position 
-        memory_bank = memory_bank[:3] #displays up to the 3rd expression
-
+        first_number = expr[0:expr.find("+")]
+        if first_number != "." and first_number[-1] != ".":
+            second_number = expr[expr.find("+")+1: ]
+            if (second_number != "." and second_number[-1] != "."
+                and second_number.find("+") < 0
+                and second_number.find("-") < 0
+                and second_number.find("*") < 0
+                and second_number.find("/") < 0):
+                first_number = float(first_number)
+                second_number = float(second_number)
+                calculation = first_number + second_number
+                answer = expr + " = " + str(calculation)
+                print(answer)
+                #inserts answer to [0] position
+                memory_bank.insert(0, answer)
+                #displays up to the 3rd expression
+                memory_bank = memory_bank[:3]
+            else:
+                print("\nInvalid expression")
+        else:
+            print("\nInvalid expression")
     #elif statement for subtraction
     elif (len(expr)-1 > expr.find("-") > 0):
-        first_number = expr[0:expr.find("-")] 
-        second_number = expr[expr.find("-")+1: ]
-
-        first_number = float(first_number)
-        second_number = float(second_number)
-        calculation = first_number - second_number
-        answer = expr + " = " + str(calculation)
-        print(answer)
-        memory_bank.insert(0, answer)
-        memory_bank = memory_bank[:3]
+        first_number = expr[0:expr.find("-")]
+        if first_number != "." and first_number[-1] != ".":
+            second_number = expr[expr.find("-")+1: ]
+            if (second_number != "." and second_number[-1] != "."
+                and second_number.find("+") < 0
+                and second_number.find("-") < 0
+                and second_number.find("*") < 0
+                and second_number.find("/") < 0):
+                first_number = float(first_number)
+                second_number = float(second_number)
+                calculation = first_number - second_number
+                answer = expr + " = " + str(calculation)
+                print(answer)
+                memory_bank.insert(0, answer)
+                memory_bank = memory_bank[:3]
+            else:
+                print("\nInvalid expression")
+        else:
+            print("\nInvalid expression")
 
     #elif statement for multiplication
     elif (len(expr)-1 > expr.find("*") > 0):
-        first_number = expr[0:expr.find("*")] 
-        second_number = expr[expr.find("*")+1: ]
-
-        first_number = float(first_number)
-        second_number = float(second_number)
-        calculation = first_number * second_number
-        answer = expr + " = " + str(calculation)
-        print(answer)
-        memory_bank.insert(0, answer)
-        memory_bank = memory_bank[:3]
+        first_number = expr[0:expr.find("*")]
+        if first_number != "." and first_number[-1] != ".":
+            second_number = expr[expr.find("*")+1: ]
+            if (second_number != "." and second_number[-1] != "."
+                and second_number.find("+") < 0
+                and second_number.find("-") < 0
+                and second_number.find("*") < 0
+                and second_number.find("/") < 0):
+                first_number = float(first_number)
+                second_number = float(second_number)
+                calculation = first_number * second_number
+                answer = expr + " = " + str(calculation)
+                print(answer)
+                memory_bank.insert(0, answer)
+                memory_bank = memory_bank[:3]
+            else:
+                print("\nInvalid expression")
+        else:
+            print("\nInvalid expression")
 
     #elif statement for division
     elif (len(expr)-1 > expr.find("/") > 0):
-        first_number = expr[0:expr.find("/")] 
-        second_number = expr[expr.find("/")+1: ]
-
-        first_number = float(first_number)
-        second_number = float(second_number)
-        calculation = first_number / second_number
-        answer = expr + " = " + str(calculation)
-        print(answer)
-        memory_bank.insert(0, answer)
-        memory_bank = memory_bank[:3]
+        first_number = expr[0:expr.find("/")]
+        if first_number != "." and first_number[-1] != ".":
+            second_number = expr[expr.find("/")+1: ]
+            if (second_number != "." and second_number[-1] != "."
+                and second_number.find("+") < 0
+                and second_number.find("-") < 0
+                and second_number.find("*") < 0
+                and second_number.find("/") < 0):
+                first_number = float(first_number)
+                second_number = float(second_number)
+                calculation = first_number / second_number
+                answer = expr + " = " + str(calculation)
+                print(answer)
+                memory_bank.insert(0, answer)
+                memory_bank = memory_bank[:3]
+            else:
+                print("\nInvalid expression")
+        else:
+            print("\nInvalid expression")
                 
     else:
         print("\nInvalid expression")
-
